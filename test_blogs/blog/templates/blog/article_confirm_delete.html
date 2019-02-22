@@ -1,0 +1,12 @@
+{% extends 'index.html' %}
+{% block title %}
+  Delete
+{% endblock%}
+
+{% block page %}
+  <form method="POST">
+    {% csrf_token %}
+    Вы действительно хотите удалить '{{object}}' пост?
+    <input type="submit" value = 'Delete' />
+  </form>
+{% endblock %}

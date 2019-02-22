@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+{% block title %}
+  {{ item.title }}
+{% endblock %}
+{% block page %}
+  {% load thumbnail %}
+
+    <div>
+      <a href="{% url 'article_list' %}">Главная</a>
+      <h2>{{ object.title }}</h2>
+        {% if object.img %}
+          {% thumbnail object.img "100x200" crop="center" as im %}
+            <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+          {% endthumbnail %}
+        {% endif %}
+      <div>{{ object.body }}</div>
+      <div>
+        <p><a href="{% url 'article_edit' object.id %}">Редактировать</a></p>
+        <p><a href="{% url 'article_delete' object.id%}">Удалить</a></p>
+      </div>
+    </div>
+{% endblock %}

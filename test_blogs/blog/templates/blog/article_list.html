@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+
+{% block page %}
+  {% load thumbnail %}
+
+    {% for item in object_list %}
+      <div>
+        <h2>{{ item.title }}</h2>
+          {% if item.img %}
+            {% thumbnail item.img "100x200" crop="center" as im %}
+              <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}">
+            {% endthumbnail %}
+          {% endif %}
+        <div>{{ item.body }}</div>
+        <a href="{% url 'article_detail' item.id%}">Деталі поста</a>
+      </div>
+    {% endfor %}
+    <div>
+      <a href="{% url 'article_new' %}">Создать пост</a>
+    </div>
+{% endblock %}
