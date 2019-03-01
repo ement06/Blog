@@ -7,6 +7,7 @@
   <title>{%block title %}Articles{% endblock %}</title>
 </head>
 <body>
+  <a href="{% url 'auth-logout' %}">Виход</a>
   {% block page %}
   {% endblock %}
 </body>

@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from blog.models import Article
 
-from blog.forms import CreatePostFrom, ArticleForm
+# from blog.forms import CreatePostFrom, ArticleForm
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
