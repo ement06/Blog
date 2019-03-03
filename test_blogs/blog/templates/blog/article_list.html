@@ -15,7 +15,9 @@
         <a href="{% url 'article_detail' item.id%}">Деталі поста</a>
       </div>
     {% endfor %}
-    <div>
-      <a href="{% url 'article_new' %}">Создать пост</a>
-    </div>
+    {% if request.user.is_authenticated and request.user.is_staff %}
+      <div>
+        <a href="{% url 'article_new' %}">Создать пост</a>
+      </div>
+    {% endif %}
 {% endblock %}

@@ -7,6 +7,7 @@
 
     <div>
       <a href="{% url 'article_list' %}">Главная</a>
+      <h1>Aвтор {{object.user_id}}</h1>
       <h2>{{ object.title }}</h2>
         {% if object.img %}
           {% thumbnail object.img "100x200" crop="center" as im %}
@@ -14,9 +15,22 @@
           {% endthumbnail %}
         {% endif %}
       <div>{{ object.body }}</div>
-      <div>
-        <p><a href="{% url 'article_edit' object.id %}">Редактировать</a></p>
-        <p><a href="{% url 'article_delete' object.id%}">Удалить</a></p>
-      </div>
+
+      {% if request.user.is_authenticated and request.user.is_staff %}
+        <div>
+          <p>Коментарии:</p>
+          {% for i in comment %}
+            <div>
+              <p><b>{{i.user}}: </b></p>
+              {{ i.contentx}}<br />
+              {{i.date}}<br />
+            </div>
+          {% endfor %}
+        </div>
+        <div>
+          <p><a href="{% url 'article_edit' object.id %}">Редактировать</a></p>
+          <p><a href="{% url 'article_delete' object.id%}">Удалить</a></p>
+        </div>
+      {% endif %}
     </div>
 {% endblock %}

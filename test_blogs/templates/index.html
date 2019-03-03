@@ -7,7 +7,11 @@
   <title>{%block title %}Articles{% endblock %}</title>
 </head>
 <body>
-  <a href="{% url 'auth-logout' %}">Виход</a>
+  {% if request.user.is_authenticated and request.user.is_staff %}
+    <a href="{% url 'auth-logout' %}">Виход</a>
+  {% else %}
+    <a href="{% url 'auth-login' %}">Вход</a>
+  {% endif %}
   {% block page %}
   {% endblock %}
 </body>
