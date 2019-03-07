@@ -12,7 +12,7 @@
             {% endthumbnail %}
           {% endif %}
         <div>{{ item.body }}</div>
-        <a href="{% url 'article_detail' item.id%}">Деталі поста</a>
+        <a href="{% url 'article_detail' item.id %}">Деталі поста</a>
       </div>
     {% endfor %}
     {% if request.user.is_authenticated and request.user.is_staff %}
