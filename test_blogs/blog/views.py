@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from blog.models import Article, Comment
 
-# from blog.forms import CreatePostFrom, ArticleForm
+from blog.forms import CommentForm
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -31,10 +31,11 @@ class ArticleDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetail, self).get_context_data(**kwargs)
-        print()
-        print(kwargs['object'].body)
-        print()
-        context['comment'] = Comment.objects.filter(article_id = kwargs['object'].id)
+
+        print(self.kwargs['pk'])
+
+        context['comment'] = Comment.objects.filter(article_id = self.kwargs['pk'])
+        context['comment_add'] = CommentForm(initial={'article_id': self.kwargs['pk'], 'user': self.request.user})
         return context
 
 # def article_detail(request, article_id):
@@ -49,6 +50,13 @@ class ArticleCreate(LoginRequiredMixin, CreateView):
 
     fields = ['title', 'img', 'body']
     login_url = '/log-in/'
+
+class CommentCreate(CreateView):
+    model = Comment
+    form_class = CommentForm
+    http_method_names = ['post']
+    template_name = 'blog/comment_form.html'
+
 
 # def create_blog(request):
 #

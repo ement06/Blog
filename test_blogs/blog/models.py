@@ -25,3 +25,6 @@ class Comment(models.Model):
 
     contentx = models.TextField()
     date = models.DateTimeField(auto_now_add=True, verbose_name = 'Дата')
+
+    def get_absolute_url(self):
+        return reverse('article_detail', args=[str(self.article_id.id)])
