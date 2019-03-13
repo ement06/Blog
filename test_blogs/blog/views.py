@@ -6,15 +6,22 @@ from blog.forms import CommentForm
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
-def func_request(request):
-    body_data = request.session
-    print(body_data)
+class RegisterFormUser(FormView):
+    form_class = UserCreationForm
+    success_url = '/blog/'
+    template_name = 'register.html'
+    def form_valid(self, form):
+        # print()
+        # print(form['is_staff'])
+        # print()
+        form.save()
 
-    return render(request, 'some.html')
+        return super(RegisterFormUser, self).form_valid(form)
 
 class ArticleList(ListView):
     model = Article

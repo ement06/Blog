@@ -19,6 +19,7 @@ from django.urls import include, path
 from django.conf.urls.static import static
 from django.conf import settings
 
+from blog.views import RegisterFormUser
 from django.contrib.auth import views as auth_views
 
 # from blog.views import main_page
@@ -26,6 +27,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('blog/', include('blog.urls')),
-    path('log-in/', auth_views.LoginView.as_view(template_name = 'blog/auth_login.html'), name = 'auth-login'),
-    path('log-out/', auth_views.LogoutView.as_view(next_page= '/blog'), name = 'auth-logout')
+    path('log-in/', auth_views.LoginView.as_view(template_name = 'auth_login.html'), name = 'auth-login'),
+    path('log-out/', auth_views.LogoutView.as_view(next_page= '/blog'), name = 'auth-logout'),
+    path('register/', RegisterFormUser.as_view(), name = 'register')
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
