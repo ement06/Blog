@@ -6,7 +6,7 @@
   {% load thumbnail %}
 
     <div>
-      <a href="{% url 'article_list' %}">Главная</a>
+      <a href="{% url 'article_list' %}">Головна</a>
       <h1>Aвтор {{object.user_id}}</h1>
       <h2>{{ object.title }}</h2>
         {% if object.img %}
@@ -35,11 +35,13 @@
             </div>
           {% endif%}
         {% include 'blog/comment_form.html' with form=comment_add %}
-        <div>
-          <p><a href="{% url 'article_edit' object.id %}">Редактировать</a></p>
-          <p><a href="{% url 'article_delete' object.id%}">Удалить</a></p>
-        </div>
+
+        {% if object.user_id == request.user %}
+          <div>
+            <p><a href="{% url 'article_edit' object.id %}">Редактировать</a></p>
+            <p><a href="{% url 'article_delete' object.id%}">Удалить</a></p>
+          </div>
+        {% endif %}
       {% endif %}
     </div>
 {% endblock %}
-<!-- test_blogs/blog/templates/comment_form.html -->

@@ -8,9 +8,10 @@
 </head>
 <body>
   {% if request.user.is_authenticated and request.user.is_staff %}
-    <a href="{% url 'auth-logout' %}">Виход</a>
+    <a href="{% url 'auth-logout' %}">Вийти</a>
   {% else %}
-    <a href="{% url 'auth-login' %}">Вход</a>
+    <a href="{% url 'auth-login' %}">Увійти</a>
+    <a href="{% url 'register' %}">Зареєструватися</a>
   {% endif %}
   {% block page %}
   {% endblock %}

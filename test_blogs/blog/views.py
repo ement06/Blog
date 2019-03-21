@@ -1,7 +1,7 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from blog.models import Article, Comment
 
-from blog.forms import CommentForm
+from blog.forms import CommentForm, RegisterUserFrom
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
@@ -9,45 +9,42 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import BaseUserManager
+from django.contrib.auth import login, authenticate
 
 # Create your views here.
-class RegisterFormUser(FormView):
-    form_class = UserCreationForm
-    success_url = '/blog/'
-    template_name = 'register.html'
-    def form_valid(self, form):
-        # print()
-        # print(form['is_staff'])
-        # print()
-        form.save()
 
-        return super(RegisterFormUser, self).form_valid(form)
+def register(request):
+    if request.method == "POST":
+        user_form = RegisterUserFrom(request.POST)
+
+        if user_form.is_valid():
+            new_user = user_form.save(commit=False)
+            new_user.set_password(user_form.cleaned_data['password2'])
+            new_user.is_staff = True
+            new_user.save()
+            new_user = authenticate(username=user_form.cleaned_data['username'],
+                                    password=user_form.cleaned_data['password2'],)
+            login(request, new_user)
+            return redirect('/blog/')
+    else:
+        user_form = RegisterUserFrom()
+
+    return render(request, 'register.html', {'form': user_form})
+
 
 class ArticleList(ListView):
     model = Article
-
-# def main_page(request):
-#     articles = Article.objects.all()
-#
-#     return render(request, 'base.html', {
-#         'articles': articles
-#     })
 
 class ArticleDetail(DetailView):
     model = Article
 
     def get_context_data(self, **kwargs):
         context = super(ArticleDetail, self).get_context_data(**kwargs)
-
-        print(self.kwargs['pk'])
-
         context['comment'] = Comment.objects.filter(article_id = self.kwargs['pk'])
         context['comment_add'] = CommentForm(initial={'article_id': self.kwargs['pk'], 'user': self.request.user})
         return context
 
-# def article_detail(request, article_id):
-#     article = get_object_or_404(Article, id = article_id)
-#     return render(request, 'article_detail.html', {'item': article})
 
 class ArticleCreate(LoginRequiredMixin, CreateView):
     model = Article
@@ -64,19 +61,6 @@ class CommentCreate(CreateView):
     http_method_names = ['post']
     template_name = 'blog/comment_form.html'
 
-
-# def create_blog(request):
-#
-#     if request.method == "POST":
-#         form = ArticleForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return HttpResponseRedirect(reverse('main_page'))
-#     else:
-#         form = ArticleForm()
-#
-#     return render(request, 'create_blog.html', {
-#         'form': form })
 
 class ArticleUpdate(LoginRequiredMixin, UpdateView):
     model = Article
